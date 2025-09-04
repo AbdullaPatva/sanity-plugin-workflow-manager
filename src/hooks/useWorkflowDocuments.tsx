@@ -1,0 +1,285 @@
+import {DraggableLocation} from '@hello-pangea/dnd'
+import {useToast} from '@sanity/ui'
+import groq from 'groq'
+import React from 'react'
+import {useClient} from 'sanity'
+import {useListeningQuery} from '../lib/compatibility'
+
+import {API_VERSION} from '../constants'
+import {SanityDocumentWithMetadata, State} from '../types'
+
+const QUERY = groq`*[_type == "workflow.metadata"]|order(orderRank){
+  "_metadata": {
+    _rev,
+    assignees,
+    documentId,
+    state,
+    orderRank,
+    "draftDocumentId": "drafts." + documentId,
+  }
+}{
+  ...,
+  ...(
+    *[_id == ^._metadata.documentId || _id == ^._metadata.draftDocumentId]|order(_updatedAt)[0]{ 
+      _id, 
+      _type, 
+      _rev, 
+      _updatedAt 
+    }
+  )
+}`
+
+type WorkflowDocuments = {
+  workflowData: {
+    data: SanityDocumentWithMetadata[]
+    loading: boolean
+    error: boolean | unknown | ProgressEvent
+  }
+  operations: {
+    move: (
+      draggedId: string,
+      destination: DraggableLocation,
+      states: State[],
+      newOrder: string
+    ) => void
+    updateAssignees: (documentId: string, assignees: string[]) => void
+  }
+}
+
+export function useWorkflowDocuments(schemaTypes: string[]): WorkflowDocuments {
+  const toast = useToast()
+  const client = useClient({apiVersion: API_VERSION})
+
+  // Get and listen to changes on documents + workflow metadata documents
+  const {data, loading, error} = useListeningQuery<
+    SanityDocumentWithMetadata[]
+  >(QUERY, {
+    params: {schemaTypes},
+    initialValue: [],
+  })
+
+  const [localDocuments, setLocalDocuments] = React.useState<
+    SanityDocumentWithMetadata[]
+  >([])
+
+  React.useEffect(() => {
+    if (data && data.length > 0) {
+      // Merge real-time updates with local optimistic updates
+      setLocalDocuments(prevLocal => {
+        if (prevLocal.length === 0) {
+          // First time loading
+          return data
+        }
+        
+        // Merge strategy: keep optimistic updates, update with real data
+        const merged = data.map(realDoc => {
+          // Find if we have a local optimistic version
+          const localDoc = prevLocal.find(local => 
+            local._metadata?.documentId === realDoc._metadata?.documentId
+          )
+          
+          if (localDoc && localDoc._metadata?.optimistic) {
+            // Keep the optimistic version but update non-optimistic fields
+            return {
+              ...realDoc,
+              _metadata: {
+                ...realDoc._metadata,
+                state: localDoc._metadata.state,
+                orderRank: localDoc._metadata.orderRank,
+                assignees: localDoc._metadata.assignees, // Preserve assignees from optimistic updates
+                optimistic: false // Clear optimistic flag
+              }
+            }
+          }
+          
+          return realDoc
+        })
+        
+        return merged
+      })
+    }
+  }, [data])
+
+  const move = React.useCallback(
+    async (
+      draggedId: string,
+      destination: DraggableLocation,
+      states: State[],
+      newOrder: string
+    ) => {
+      
+      // Get the document and revision BEFORE optimistic update
+      const document = localDocuments.find(
+        (d) => d?._metadata?.documentId === draggedId
+      )
+
+
+      if (!document) {
+        toast.push({
+          title: `Could not find dragged document in data`,
+          status: 'error',
+        })
+        return null
+      }
+
+      // Get the latest revision from real-time data before optimistic update
+      const realTimeDocument = Array.isArray(data) ? data.find(d => d._metadata?.documentId === draggedId) : null
+      const _rev = realTimeDocument?._metadata?._rev || document._metadata?._rev
+
+
+      if (!_rev) {
+        toast.push({
+          title: `Failed to move document`,
+          description: 'Document revision not found',
+          status: 'error',
+        })
+        return null
+      }
+
+      // Now do optimistic update
+      const currentLocalData = localDocuments
+      const newLocalDocuments = localDocuments.map((item) => {
+        if (item?._metadata?.documentId === draggedId) {
+          return {
+            ...item,
+            _metadata: {
+              ...item._metadata,
+              state: destination.droppableId,
+              orderRank: newOrder,
+              // Preserve _rev for conflict detection
+              _rev: _rev,
+              // This value won't be written to the document
+              // It's done so that un/publish operations don't happen twice
+              // Because a moved document's card will update once optimistically
+              // and then again when the document is updated
+              optimistic: true,
+            },
+          }
+        }
+
+        return item
+      })
+
+      setLocalDocuments(newLocalDocuments)
+
+      // Now client-side update
+      const newStateId = destination.droppableId
+      const newState = states.find((s) => s.id === newStateId)
+
+      if (!newState?.id) {
+        toast.push({
+          title: `Could not find target state ${newStateId}`,
+          status: 'error',
+        })
+        return null
+      }
+
+      // We need to know if it's a draft or not
+      const {_id, _type} = document
+
+      // Metadata + useDocumentOperation always uses Published id
+      const {documentId} = document._metadata || {}
+
+      try {
+        // First attempt with current revision
+        const result = await client
+          .patch(`workflow-metadata.${documentId}`)
+          .ifRevisionId(_rev)
+          .set({state: newStateId, orderRank: newOrder})
+          .commit()
+        
+
+        toast.push({
+          title:
+            newState.id === document._metadata.state
+              ? `Reordered in "${newState?.title ?? newStateId}"`
+              : `Moved to "${newState?.title ?? newStateId}"`,
+          status: 'success',
+        })
+
+        return result
+      } catch (err: any) {
+        // Check if it's a conflict error
+        if (err.statusCode === 409) {
+          try {
+            // Fetch the latest version and retry
+            const latestDoc = await client.fetch(
+              `*[_type == "workflow.metadata" && documentId == $documentId][0]`,
+              { documentId }
+            )
+
+            if (latestDoc) {
+              // Retry with the latest revision
+              const retryResult = await client
+                .patch(`workflow-metadata.${documentId}`)
+                .ifRevisionId(latestDoc._rev)
+                .set({state: newStateId, orderRank: newOrder})
+                .commit()
+
+              toast.push({
+                title:
+                  newState.id === document._metadata.state
+                    ? `Reordered in "${newState?.title ?? newStateId}"`
+                    : `Moved to "${newState?.title ?? newStateId}"`,
+                status: 'success',
+              })
+
+              return retryResult
+            }
+          } catch (retryErr: any) {
+            // If retry also fails, revert optimistic update
+            setLocalDocuments(currentLocalData)
+            
+            toast.push({
+              title: `Failed to move to "${newState?.title ?? newStateId}"`,
+              description: `Conflict resolution failed: ${retryErr.message}`,
+              status: 'error',
+            })
+            return null
+          }
+        }
+
+        // For non-conflict errors, revert optimistic update
+        setLocalDocuments(currentLocalData)
+
+        toast.push({
+          title: `Failed to move to "${newState?.title ?? newStateId}"`,
+          description: err.message,
+          status: 'error',
+        })
+        return null
+      }
+
+      // Send back to the workflow board so a document update can happen
+      return {_id, _type, documentId, state: newState as State}
+    },
+    [client, toast, localDocuments]
+  )
+
+  // Function to update assignees optimistically
+  const updateAssignees = React.useCallback(
+    (documentId: string, newAssignees: string[]) => {
+      setLocalDocuments(prev => 
+        prev.map(doc => {
+          if (doc._metadata?.documentId === documentId) {
+            return {
+              ...doc,
+              _metadata: {
+                ...doc._metadata,
+                assignees: newAssignees,
+                optimistic: true, // Mark as optimistic update
+              }
+            }
+          }
+          return doc
+        })
+      )
+    },
+    []
+  )
+
+  return {
+    workflowData: {data: localDocuments, loading, error},
+    operations: {move, updateAssignees},
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "name": "@multidots/sanity-plugin-workflow-manager",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Workflow Manager plugin for Sanity Studio v4 providing workflow management with drag & drop.",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npx esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=browser --target=es2020 --external:react --external:react-dom --external:sanity --external:@sanity/icons --external:@sanity/ui --external:@hello-pangea/dnd --external:framer-motion --external:styled-components --external:groq --external:lexorank --external:@tanstack/react-virtual --sourcemap",
+    "dev": "npx esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=browser --target=es2020 --external:react --external:react-dom --external:sanity --external:@sanity/icons --external:@sanity/ui --external:@hello-pangea/dnd --external:framer-motion --external:styled-components --external:groq --external:lexorank --external:@tanstack/react-virtual --sourcemap --watch",
+    "clean": "rm -rf dist",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "sanity": "^4.0.0",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "@hello-pangea/dnd": "^16.5.0",
+    "@sanity/icons": "^3.0.0",
+    "@sanity/ui": "^3.0.0",
+    "@sanity/types": "^3.0.0",
+    "@tanstack/react-virtual": "^3.0.0",
+    "framer-motion": "^10.0.0",
+    "groq": "^3.0.0",
+    "lexorank": "^1.0.0",
+    "styled-components": "^6.1.15"
+  },
+  "peerDependenciesMeta": {
+    "sanity": {
+      "optional": false
+    },
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    },
+    "@hello-pangea/dnd": {
+      "optional": false
+    },
+    "@sanity/icons": {
+      "optional": false
+    },
+    "@sanity/ui": {
+      "optional": false
+    },
+    "@sanity/types": {
+      "optional": false
+    },
+    "@tanstack/react-virtual": {
+      "optional": false
+    },
+    "framer-motion": {
+      "optional": false
+    },
+    "groq": {
+      "optional": false
+    },
+    "lexorank": {
+      "optional": false
+    },
+    "styled-components": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "typescript": "^5.0.0"
+  },
+  "files": ["dist", "tsconfig.json"],
+  "keywords": [
+    "sanity",
+    "sanity-plugin",
+    "workflow",
+    "content-management",
+    "drag-and-drop"
+  ],
+  "license": "MIT"
+} 
