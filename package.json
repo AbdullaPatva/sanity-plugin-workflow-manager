@@ -1,6 +1,6 @@
 {
   "name": "@multidots/sanity-plugin-workflow-manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "Workflow Manager plugin for Sanity Studio v4 providing workflow management with drag & drop.",
   "main": "dist/index.js",
