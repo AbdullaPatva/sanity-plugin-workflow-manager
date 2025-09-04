@@ -7,22 +7,22 @@ A comprehensive Sanity Studio v4 plugin for managing content workflows with adva
 *Main workflow board showing drag-and-drop interface with document cards*
 
 ### Workflow Management
-![Workflow Board](https://share.cleanshot.com/6q4hyz5rbM6RKbwzNLRK)
+- [Workflow Board](https://share.cleanshot.com/6q4hyz5rbM6RKbwzNLRK)
 *Visual workflow board with drag-and-drop functionality*
 
-![Document Cards](https://share.cleanshot.com/fbh8YYx6x3d77xfq0dz8)
+- [Document Cards](https://share.cleanshot.com/fbh8YYx6x3d77xfq0dz8)
 *Rich document cards with metadata and user assignments*
 
 ### Publishing Calendar
-![Calendar View](https://share.cleanshot.com/spG2Y4sJS7RPwYbjYT2n)
+- [Calendar View](https://share.cleanshot.com/spG2Y4sJS7RPwYbjYT2n)
 *Publishing calendar with scheduled content and drag-and-drop scheduling*
 
 ### Quick Edit Modal
-![Quick Edit Modal](https://share.cleanshot.com/tWgrFmc5r9YxQhWlTCgf)
+- [Quick Edit Modal](https://share.cleanshot.com/tWgrFmc5r9YxQhWlTCgf)
 *Quick edit modal for rapid document editing*
 
 ### Context Menu
-![Context Menu](https://share.cleanshot.com/fSyg0DJPbry8Hh9yVMpY)
+- [Context Menu](https://share.cleanshot.com/fSyg0DJPbry8Hh9yVMpY)
 *Right-click context menu with document actions*
 
 ## Features
