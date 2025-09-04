@@ -2,31 +2,28 @@
 
 A comprehensive Sanity Studio v4 plugin for managing content workflows with advanced features including drag-and-drop functionality, user assignments, publishing calendar, and state management.
 
-![Workflow Manager Overview](https://via.placeholder.com/800x400/0070f3/ffffff?text=Workflow+Manager+Overview)
+![Workflow Manager Overview](https://share.cleanshot.com/GbTCjwh2f8xncSl2WGSS)
 *Main workflow board showing drag-and-drop interface with document cards*
 
 ## Screenshots
 
 ### Workflow Management
-![Workflow Board](https://via.placeholder.com/800x500/0070f3/ffffff?text=Workflow+Board+Interface)
+![Workflow Board](https://share.cleanshot.com/6q4hyz5rbM6RKbwzNLRK)
 *Visual workflow board with drag-and-drop functionality*
 
-![Document Cards](https://via.placeholder.com/800x400/0070f3/ffffff?text=Rich+Document+Cards)
+![Document Cards](https://share.cleanshot.com/fbh8YYx6x3d77xfq0dz8)
 *Rich document cards with metadata and user assignments*
 
 ### Publishing Calendar
-![Calendar View](https://via.placeholder.com/800x500/0070f3/ffffff?text=Publishing+Calendar)
+![Calendar View](https://share.cleanshot.com/spG2Y4sJS7RPwYbjYT2n)
 *Publishing calendar with scheduled content and drag-and-drop scheduling*
 
-![Calendar Event](https://via.placeholder.com/600x300/0070f3/ffffff?text=Calendar+Event+Details)
-*Calendar event with workflow state and dependencies*
-
 ### Quick Edit Modal
-![Quick Edit Modal](https://via.placeholder.com/600x400/0070f3/ffffff?text=Quick+Edit+Modal)
+![Quick Edit Modal](https://share.cleanshot.com/tWgrFmc5r9YxQhWlTCgf)
 *Quick edit modal for rapid document editing*
 
 ### Context Menu
-![Context Menu](https://via.placeholder.com/400x300/0070f3/ffffff?text=Context+Menu)
+![Context Menu](https://share.cleanshot.com/fSyg0DJPbry8Hh9yVMpY)
 *Right-click context menu with document actions*
 
 ## Features
@@ -178,12 +175,6 @@ The plugin provides several document actions and badges:
 5. Assign users to documents for review
 6. Use filters to view specific users or document types
 
-![Workflow Tool Interface](https://via.placeholder.com/1000x600/0070f3/ffffff?text=Workflow+Tool+Interface)
-*Workflow tool showing documents organized by states with drag-and-drop functionality*
-
-![User Assignment](https://via.placeholder.com/800x400/0070f3/ffffff?text=User+Assignment+Interface)
-*User assignment interface with avatar groups and assignment controls*
-
 ### Publishing Calendar
 
 1. Navigate to the **Publishing Calendar** tool from the navigation menu on top
@@ -192,15 +183,6 @@ The plugin provides several document actions and badges:
 4. Click on calendar events to open Quick Edit Modal
 5. Manage publishing dependencies
 6. Filter by workflow states
-
-![Publishing Calendar Interface](https://via.placeholder.com/1200x700/0070f3/ffffff?text=Publishing+Calendar+Interface)
-*Publishing calendar showing scheduled content with drag-and-drop scheduling*
-
-![Calendar Month View](https://via.placeholder.com/1000x600/0070f3/ffffff?text=Calendar+Month+View)
-*Calendar month view with scheduled documents and workflow states*
-
-![Calendar Drag Drop](https://via.placeholder.com/800x500/0070f3/ffffff?text=Calendar+Drag+and+Drop)
-*Drag and drop functionality for scheduling documents*
 
 ### Rich Document Cards
 
@@ -211,12 +193,6 @@ Document cards display:
 - Assigned users with avatars
 - Action buttons for editing and state changes
 - Visual indicators for validation status
-
-![Rich Document Cards](https://via.placeholder.com/1000x500/0070f3/ffffff?text=Rich+Document+Cards)
-*Rich document cards with metadata, user assignments, and status badges*
-
-![Document Card Details](https://via.placeholder.com/600x400/0070f3/ffffff?text=Document+Card+Details)
-*Detailed view of document card with all metadata and actions*
 
 ### Quick Edit Modal
 
@@ -232,12 +208,6 @@ Features:
 - Manage publishing dependencies
 - Navigate to full document editor
 
-![Quick Edit Modal](https://via.placeholder.com/800x600/0070f3/ffffff?text=Quick+Edit+Modal)
-*Quick edit modal with document editing and workflow state management*
-
-![Modal State Transitions](https://via.placeholder.com/600x400/0070f3/ffffff?text=State+Transitions)
-*State transition interface with permission checking*
-
 ### Context Menu
 
 Right-click on calendar events to access:
@@ -247,12 +217,6 @@ Right-click on calendar events to access:
 - Unschedule document
 - View dependency information
 
-![Context Menu](https://via.placeholder.com/500x400/0070f3/ffffff?text=Context+Menu)
-*Right-click context menu with document actions*
-
-![Context Menu Actions](https://via.placeholder.com/400x300/0070f3/ffffff?text=Context+Menu+Actions)
-*Context menu showing available actions for calendar events*
-
 ### Publishing Dependencies
 
 Set up dependencies by:
@@ -260,13 +224,6 @@ Set up dependencies by:
 2. Using the Dependency Manager
 3. Searching for documents to depend on
 4. Adding or removing dependencies
-
-![Dependency Manager](https://via.placeholder.com/700x500/0070f3/ffffff?text=Dependency+Manager)
-*Dependency manager interface for setting up publishing dependencies*
-
-![Dependency Search](https://via.placeholder.com/600x400/0070f3/ffffff?text=Dependency+Search)
-*Document search interface for finding dependencies*
-5. Validating circular dependency prevention
 
 ## Configuration
 
