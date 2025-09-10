@@ -2,6 +2,9 @@
 
 A comprehensive Sanity Studio v4 plugin for managing content workflows with advanced features including drag-and-drop functionality, user assignments, publishing calendar, and state management.
 
+## Video Tutorial
+- [Workflow Manager Tutorial](https://share.cleanshot.com/V6k9r2t5rxDfnFm7tn8L)
+
 ## Screenshots
 - [Workflow Manager Overview](https://share.cleanshot.com/GbTCjwh2f8xncSl2WGSS)
 *Main workflow board showing drag-and-drop interface with document cards*
